@@ -1,4 +1,10 @@
-async function createGenre(req, res) {
+async function createGenreGet(req, res) {
+  try {
+    res.send(req.params);
+  } catch (err) {}
+}
+
+async function createGenrePost(req, res) {
   try {
     res.send(req.params);
   } catch (err) {}
@@ -10,21 +16,36 @@ async function readGenres(req, res) {
   } catch (err) {}
 }
 
-async function updateGenre(req, res) {
+async function updateGenreGet(req, res) {
   try {
     res.send(req.params);
   } catch (err) {}
 }
 
-async function deleteGenre(req, res) {
+async function updateGenrePost(req, res) {
+  try {
+    res.send(req.params);
+  } catch (err) {}
+}
+
+async function deleteGenreGet(req, res) {
+  try {
+    res.send(req.params);
+  } catch (err) {}
+}
+
+async function deleteGenrePost(req, res) {
   try {
     res.send(req.params);
   } catch (err) {}
 }
 
 module.exports = {
-  createGenre,
+  createGenreGet,
+  createGenrePost,
   readGenres,
-  updateGenre,
-  deleteGenre,
+  updateGenreGet,
+  updateGenrePost,
+  deleteGenreGet,
+  deleteGenrePost,
 };

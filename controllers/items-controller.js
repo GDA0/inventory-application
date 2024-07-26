@@ -1,4 +1,10 @@
-async function createItem(req, res) {
+async function createItemGet(req, res) {
+  try {
+    res.send(req.params);
+  } catch (err) {}
+}
+
+async function createItemPost(req, res) {
   try {
     res.send(req.params);
   } catch (err) {}
@@ -16,22 +22,37 @@ async function readItem(req, res) {
   } catch (err) {}
 }
 
-async function updateItem(req, res) {
+async function updateItemGet(req, res) {
   try {
     res.send(req.params);
   } catch (err) {}
 }
 
-async function deleteItem(req, res) {
+async function updateItemPost(req, res) {
+  try {
+    res.send(req.params);
+  } catch (err) {}
+}
+
+async function deleteItemGet(req, res) {
+  try {
+    res.send(req.params);
+  } catch (err) {}
+}
+
+async function deleteItemPost(req, res) {
   try {
     res.send(req.params);
   } catch (err) {}
 }
 
 module.exports = {
-  createItem,
+  createItemGet,
+  createItemPost,
   readItems,
   readItem,
-  updateItem,
-  deleteItem,
+  updateItemGet,
+  updateItemPost,
+  deleteItemGet,
+  deleteItemPost,
 };
