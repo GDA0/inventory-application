@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { client } = require("./client_and_pool");
+const { client } = require("./client-and-pool");
 
 const SQL = `
 -- Drop tables if they exist
