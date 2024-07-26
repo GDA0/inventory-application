@@ -3,7 +3,7 @@ const { pool } = require("./client-and-pool");
 async function getGenres(categoryId) {
   try {
     const { rows } = await pool.query(
-      "SELECT * FROM genres WHERE category_id=$1",
+      "SELECT * FROM genres WHERE category_id = $1",
       [categoryId]
     );
     return rows;
@@ -16,13 +16,10 @@ async function getGenres(categoryId) {
 async function getItems(categoryId, genreId) {
   try {
     const query = `
-      SELECT i.id, i.name, i.description, i.likes, array_agg(DISTINCT g.name) AS genres
+      SELECT i.id, i.name, i.description, i.likes
       FROM items i
-      JOIN item_genre ig ON i.id = ig.item_id
-      JOIN genres g ON ig.genre_id = g.id
       WHERE i.category_id = $1
-        AND g.id = $2
-      GROUP BY i.id;
+        AND i.genre_id = $2
     `;
 
     const values = [categoryId, genreId];
@@ -41,14 +38,11 @@ async function getItems(categoryId, genreId) {
 async function getItem(itemId, categoryId, genreId) {
   try {
     const query = `
-      SELECT i.id, i.name, i.description, i.likes, array_agg(DISTINCT g.name) AS genres
+      SELECT i.id, i.name, i.description, i.likes
       FROM items i
-      JOIN item_genre ig ON i.id = ig.item_id
-      JOIN genres g ON ig.genre_id = g.id
       WHERE i.id = $1
         AND i.category_id = $2
-        AND g.id = $3
-      GROUP BY i.id;
+        AND i.genre_id = $3
     `;
 
     const values = [itemId, categoryId, genreId];
@@ -73,23 +67,22 @@ async function getGenreName(genreId, categoryId) {
       [genreId, categoryId]
     );
 
-    return rows[0].name;
-  } catch (error) {
+    return rows[0]?.name;
+  } catch (err) {
     console.error(
       `Error fetching genre name for genre ID ${genreId} and category ID ${categoryId}:`,
-      error
+      err
     );
-    throw error;
+    throw err;
   }
 }
 
 async function addGenre(name, categoryId) {
   try {
-    const { rows } = await pool.query(
-      `INSERT INTO genres (name, category_id) VALUES ($1, $2)`,
-      [name, categoryId]
-    );
-    return rows[0]; // return the newly created genre
+    await pool.query(`INSERT INTO genres (name, category_id) VALUES ($1, $2)`, [
+      name,
+      categoryId,
+    ]);
   } catch (err) {
     console.error(`Error creating genre for category ID ${categoryId}:`, err);
     throw err;
@@ -99,17 +92,65 @@ async function addGenre(name, categoryId) {
 async function genreExists(name, categoryId) {
   try {
     const query = `
-        SELECT 1 FROM genres
-        WHERE name ILIKE $1
+      SELECT 1 FROM genres
+      WHERE name ILIKE $1
         AND category_id = $2
-        LIMIT 1
+      LIMIT 1
     `;
     const values = [name, categoryId];
     const result = await pool.query(query, values);
     return result.rowCount > 0;
-  } catch (error) {
-    console.error("Error checking genre existence:", error);
-    throw error;
+  } catch (err) {
+    console.error("Error checking genre existence:", err);
+    throw err;
+  }
+}
+
+async function itemExists(name, categoryId, genreId) {
+  try {
+    const query = `
+      SELECT 1 FROM items i
+      WHERE i.name ILIKE $1
+        AND i.category_id = $2
+        AND i.genre_id = $3
+      LIMIT 1
+    `;
+    const values = [name, categoryId, genreId];
+    const result = await pool.query(query, values);
+    return result.rowCount > 0;
+  } catch (err) {
+    console.error("Error checking item existence:", err);
+    throw err;
+  }
+}
+
+async function addItem(name, description, categoryId, genreId) {
+  try {
+    await pool.query(
+      `INSERT INTO items (name, description, category_id, genre_id) VALUES ($1, $2, $3, $4)`,
+      [name, description, categoryId, genreId]
+    );
+  } catch (err) {
+    console.error(
+      `Error creating item with name "${name}", description "${description}", category ID ${categoryId}, and genre ID ${genreId}:`,
+      err
+    );
+    throw err;
+  }
+}
+
+async function addItemGenre(itemId, genreId) {
+  try {
+    await pool.query(
+      `INSERT INTO item_genre (item_id, genre_id) VALUES ($1, $2)`,
+      [itemId, genreId]
+    );
+  } catch (err) {
+    console.error(
+      `Error adding item_genre for item ID ${itemId} and genre ID ${genreId}:`,
+      err
+    );
+    throw err;
   }
 }
 
@@ -120,4 +161,7 @@ module.exports = {
   getGenreName,
   addGenre,
   genreExists,
+  itemExists,
+  addItem,
+  addItemGenre,
 };

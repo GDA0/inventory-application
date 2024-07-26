@@ -28,7 +28,7 @@ const createGenrePost = [
     if (!errors.isEmpty()) {
       // Render the form again with validation errors
       const { categoryId } = req.params;
-      return res.status(400).render("./forms/create-genre", {
+      return res.render("./forms/create-genre", {
         title: "Create genre",
         categoryId,
         errors: errors.array(),

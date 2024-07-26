@@ -1,4 +1,5 @@
 const queries = require("../database/queries");
+const { body, validationResult } = require("express-validator");
 
 async function createItemGet(req, res) {
   try {
@@ -13,11 +14,52 @@ async function createItemGet(req, res) {
   } catch (err) {}
 }
 
-async function createItemPost(req, res) {
-  try {
-    res.send(req.params);
-  } catch (err) {}
-}
+const createItemPost = [
+  // Validation rules
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("name is required")
+    .isLength({ min: 3 })
+    .withMessage("name must be at least 3 characters long")
+    .escape(),
+  body("description").optional().trim().escape(),
+
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      // Render the form again with validation errors
+      const { categoryId, genreId } = req.params;
+      return res.render("./forms/create-genre", {
+        title: categoryId == 1 ? "Create movie" : "Create tv show",
+        categoryId,
+        genreId,
+        errors: errors.array(),
+        formData: req.body,
+      });
+    }
+
+    try {
+      const { name, description } = req.body;
+      const { categoryId, genreId } = req.params;
+      // Add the item to the database if it doesn't exist
+      const itemExists = await queries.itemExists(
+        name.trim(),
+        categoryId,
+        genreId
+      );
+      if (!itemExists) {
+        await queries.addItem(
+          name.trim(),
+          description.trim(),
+          categoryId,
+          genreId
+        );
+      }
+      res.redirect(`/categories/${categoryId}/genres/${genreId}/items`);
+    } catch (err) {}
+  },
+];
 
 async function readItems(req, res) {
   try {

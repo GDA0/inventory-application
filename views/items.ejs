@@ -25,16 +25,18 @@
         <h6 class="mb-0">
           <a
             href="/categories/<%= categoryId %>/genres/<%= genreId %>/items/<%= item.id %>"
-            ><%= item.name %></a
+            ><%- item.name %></a
           >
         </h6>
-        Description: <%= item.description %><br />
+        Description: <%- item.description %><br />
         Likes: <%= item.likes %><br />
       </li>
       <% }) %>
     </ul>
     <% } else { %>
-    <p>No items found for this genre.</p>
+    <p>
+      No <%= categoryId == 1 ? 'movies' : 'tv shows' %> found for this genre.
+    </p>
     <% } %>
   </div>
 </div>
