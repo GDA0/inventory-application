@@ -17,7 +17,7 @@ async function readItems(req, res) {
     const { categoryId, genreId } = req.params;
     const items = await queries.getItems(categoryId, genreId);
     const categoryName = categoryId === "1" ? "Movies" : "TV Shows";
-    const genreName = await queries.getGenreName(categoryId, genreId);
+    const genreName = await queries.getGenreName(genreId, categoryId);
     const title = `${categoryName} | ${genreName}`;
     res.render("items", { title, items, categoryId, genreId });
   } catch (err) {}
@@ -26,7 +26,7 @@ async function readItems(req, res) {
 async function readItem(req, res) {
   try {
     const { categoryId, genreId, itemId } = req.params;
-    const item = await queries.getItem(categoryId, genreId, itemId);
+    const item = await queries.getItem(itemId, categoryId, genreId);
     res.render("item", {
       title: categoryId === "1" ? "Movie" : "TV Show",
       item,
