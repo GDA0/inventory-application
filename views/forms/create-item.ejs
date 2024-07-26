@@ -1,0 +1,56 @@
+<% layout('layout') %> <% if (errors && errors.length > 0) { %>
+<div class="alert alert-danger">
+  <ul>
+    <% errors.forEach(error => { %>
+    <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+</div>
+<% } %>
+
+<form
+  class="d-flex flex-column"
+  action="/categories/<%= categoryId %>/genres/:genreId/items/create"
+  method="post"
+  novalidate
+>
+  <div class="mb-3">
+    <label for="name" class="form-label"
+      >Enter <%= categoryId == 1 ? 'movie' : 'tv show' %> name</label
+    >
+    <input
+      type="text"
+      class="form-control"
+      name="name"
+      id="name"
+      placeholder="E.g. <%= categoryId == 1 ? 'Shawshank Redemption' : 'Breaking Bad' %>"
+      value="<%= formData ? formData.name : '' %>"
+      required
+    />
+    <div class="form-text">
+      Note: <%= categoryId == 1 ? 'Movie' : 'TV Show' %> names that already
+      exist in this genre won't be created.
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label"
+      >Enter <%= categoryId == 1 ? 'movie' : 'tv show' %> description</label
+    >
+    <textarea
+      name="description"
+      id="description"
+      class="form-control"
+      rows="3"
+    ></textarea>
+  </div>
+  <div class="ms-auto">
+    <a
+      class="btn btn-secondary me-1"
+      href="/categories/<%= categoryId %>/genres/<%= genreId %>/items"
+      >Cancel</a
+    >
+    <button class="btn btn-primary" type="submit">
+      Create <%= categoryId == 1 ? 'movie' : 'tv show' %>
+    </button>
+  </div>
+</form>

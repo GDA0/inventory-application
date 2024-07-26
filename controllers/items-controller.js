@@ -2,7 +2,14 @@ const queries = require("../database/queries");
 
 async function createItemGet(req, res) {
   try {
-    res.send(req.params);
+    const { categoryId, genreId } = req.params;
+    res.render("./forms/create-item", {
+      title: categoryId == 1 ? "Create movie" : "Create tv show",
+      errors: [],
+      categoryId,
+      formData: {},
+      genreId,
+    });
   } catch (err) {}
 }
 
