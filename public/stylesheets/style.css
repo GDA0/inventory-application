@@ -23,3 +23,8 @@ footer a {
 footer a:hover {
   text-decoration: underline;
 }
+
+.category img {
+  max-width: 240px;
+  border-radius: 8px;
+}

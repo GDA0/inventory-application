@@ -1,7 +1,9 @@
 async function readCategories(req, res) {
   try {
-    res.send(req.params);
-  } catch (err) {}
+    res.render("categories", { title: "Categories" });
+  } catch (err) {
+    res.render("error");
+  }
 }
 
 module.exports = {
