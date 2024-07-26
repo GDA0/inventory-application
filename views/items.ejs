@@ -9,6 +9,11 @@
           <a href="/categories/<%= categoryId %>/genres">Back</a>
         </li>
         <li class="breadcrumb-item">
+          <a href="/categories/<%= categoryId %>/genres/<%= genreId %>/update"
+            >Update genre</a
+          >
+        </li>
+        <li class="breadcrumb-item">
           <a
             href="/categories/<%= categoryId %>/genres/<%= genreId %>/items/create"
             >Create <%= categoryId == 1 ? 'movie' : 'tv show' %></a

@@ -1,6 +1,4 @@
-<% layout('layout') %> 
-
-<% if (errors && errors.length > 0) { %>
+<% layout('layout') %> <% if (errors && errors.length > 0) { %>
 <div class="alert alert-danger">
   <ul>
     <% errors.forEach(error => { %>
@@ -27,7 +25,9 @@
       value="<%= formData ? formData.name : '' %>"
       required
     />
-    <div class="form-text">Note: Genre names that already exist in this category won't be created.</div>
+    <div class="form-text">
+      Note: Genre names that already exist in this category won't be created.
+    </div>
   </div>
   <div class="ms-auto">
     <a
@@ -35,6 +35,8 @@
       href="/categories/<%= categoryId %>/genres"
       >Cancel</a
     >
-    <button class="btn btn-primary" type="submit">Create genre</button>
+    <button class="btn btn-primary" type="submit">
+      <%= verb ? verb : 'Create' %> genre
+    </button>
   </div>
 </form>

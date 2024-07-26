@@ -9,6 +9,7 @@ async function createGenreGet(req, res) {
       categoryId,
       errors: [],
       formData: {},
+      verb: "",
     });
   } catch (err) {}
 }
@@ -33,6 +34,7 @@ const createGenrePost = [
         categoryId,
         errors: errors.array(),
         formData: req.body,
+        verb: "",
       });
     }
 
@@ -63,7 +65,15 @@ async function readGenres(req, res) {
 
 async function updateGenreGet(req, res) {
   try {
-    res.send(req.params);
+    const { categoryId, genreId } = req.params;
+    const genreName = await queries.getGenreName(genreId, categoryId);
+    res.render("./forms/create-genre", {
+      title: "Update genre",
+      categoryId,
+      errors: [],
+      formData: { name: genreName },
+      verb: "Update",
+    });
   } catch (err) {}
 }
 
