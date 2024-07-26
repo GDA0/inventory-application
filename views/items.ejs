@@ -1,0 +1,23 @@
+<% layout('layout') %>
+
+<div>
+  <div class="d-flex my-1 align-items-center">
+    <h5><%= title %></h5>
+    <a class="ms-auto" href="/categories/<%= categoryId %>/genres">Back</a>
+  </div>
+  <div>
+    <% if (items.length > 0) { %>
+    <ul>
+      <% items.forEach(item => { %>
+      <li>
+        <strong><%= item.name %></strong><br />
+        Description: <%= item.description %><br />
+        Likes: <%= item.likes %><br />
+      </li>
+      <% }) %>
+    </ul>
+    <% } else { %>
+    <p>No items found for this genre.</p>
+    <% } %>
+  </div>
+</div>

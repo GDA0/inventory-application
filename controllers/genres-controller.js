@@ -15,11 +15,11 @@ async function createGenrePost(req, res) {
 async function readGenres(req, res) {
   try {
     const { categoryId } = req.params;
-    const genres = await queries.getGenresByCategoryId(categoryId);
+    const genres = await queries.getGenres(categoryId);
     res.render("genres", {
-      title: categoryId === 1 ? "Movies" : "TV Shows",
-      categoryId: categoryId,
-      genres: genres,
+      title: categoryId === "1" ? "Movies" : "TV Shows",
+      categoryId,
+      genres,
     });
   } catch (err) {}
 }

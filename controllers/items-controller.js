@@ -1,3 +1,5 @@
+const queries = require("../database/queries");
+
 async function createItemGet(req, res) {
   try {
     res.send(req.params);
@@ -12,7 +14,12 @@ async function createItemPost(req, res) {
 
 async function readItems(req, res) {
   try {
-    res.send(req.params);
+    const { categoryId, genreId } = req.params;
+    const items = await queries.getItems(categoryId, genreId);
+    const categoryName = categoryId === "1" ? "Movies" : "TV Shows";
+    const genreName = await queries.getGenreName(categoryId, genreId);
+    const title = `${categoryName} | ${genreName}`;
+    res.render("items", { title, items, categoryId });
   } catch (err) {}
 }
 
