@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const engine = require("ejs-mate");
 
 const indexRouter = require("./routes/index");
 const categoriesRouter = require("./routes/categories");
@@ -14,6 +15,7 @@ const app = express();
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.engine("ejs", engine);
 
 app.use(logger("dev"));
 app.use(express.json());
