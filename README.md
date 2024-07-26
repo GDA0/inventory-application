@@ -1,2 +1,3 @@
-# inventory-application
+# Inventory Application
+
 An inventory application
