@@ -1,3 +1,5 @@
+const queries = require("../database/queries");
+
 async function createGenreGet(req, res) {
   try {
     res.send(req.params);
@@ -12,7 +14,13 @@ async function createGenrePost(req, res) {
 
 async function readGenres(req, res) {
   try {
-    res.send(req.params);
+    const { categoryId } = req.params;
+    const genres = await queries.getGenresByCategoryId(categoryId);
+    res.render("genres", {
+      title: categoryId === 1 ? "Movies" : "TV Shows",
+      categoryId: categoryId,
+      genres: genres,
+    });
   } catch (err) {}
 }
 

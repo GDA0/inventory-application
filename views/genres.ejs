@@ -1,0 +1,27 @@
+<% layout('layout') %>
+
+<div>
+  <div class="d-flex my-1 align-items-center">
+    <h5>
+      <% if (categoryId === 1) { %> Movie Genres <% } else { %> TV Show Genres
+      <% } %>
+    </h5>
+    <a class="ms-auto" href="/categories">Back</a>
+  </div>
+
+  <div class="row g-3">
+    <% genres.forEach(genre => { %>
+    <div class="col col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <a
+            href="/categories/<%= genre.category_id %>/genres/<%= genre.id %>/items"
+          >
+            <h6 class="card-title"><%= genre.name %></h6>
+          </a>
+        </div>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+</div>
