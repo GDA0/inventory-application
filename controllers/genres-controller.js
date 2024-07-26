@@ -2,7 +2,8 @@ const queries = require("../database/queries");
 
 async function createGenreGet(req, res) {
   try {
-    res.send(req.params);
+    const { categoryId } = req.params;
+    res.render("./forms/add-genre", { title: "Create genre", categoryId });
   } catch (err) {}
 }
 
