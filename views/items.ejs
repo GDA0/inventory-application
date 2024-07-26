@@ -10,7 +10,12 @@
     <ul>
       <% items.forEach(item => { %>
       <li>
-        <strong><%= item.name %></strong><br />
+        <h6 class="mb-0">
+          <a
+            href="/categories/<%= categoryId%>/genres/<%= genreId %>/items/<%= item.id %>"
+            ><%= item.name %></a
+          >
+        </h6>
         Description: <%= item.description %><br />
         Likes: <%= item.likes %><br />
       </li>

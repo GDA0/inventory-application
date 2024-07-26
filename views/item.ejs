@@ -1,0 +1,13 @@
+<% layout('layout') %>
+
+<div>
+  <div>
+    <h3 class="mb-0"><%= item.name %></h3>
+    Description: <%= item.description %><br />
+    Genres: <%= item.genres.join(', ') %><br />
+    Likes: <%= item.likes %><br />
+  </div>
+  <div class="mt-3">
+    <a href="/categories/<%= categoryId%>/genres/<%= genreId %>/items">Back</a>
+  </div>
+</div>

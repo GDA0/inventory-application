@@ -38,6 +38,32 @@ async function getItems(categoryId, genreId) {
   }
 }
 
+async function getItem(categoryId, genreId, itemId) {
+  try {
+    const query = `
+      SELECT i.id, i.name, i.description, i.likes, array_agg(DISTINCT g.name) AS genres
+      FROM items i
+      JOIN item_genre ig ON i.id = ig.item_id
+      JOIN genres g ON ig.genre_id = g.id
+      WHERE i.category_id = $1
+        AND g.id = $2
+        AND i.id = $3
+      GROUP BY i.id;
+    `;
+
+    const values = [categoryId, genreId, itemId];
+
+    const { rows } = await pool.query(query, values);
+    return rows[0];
+  } catch (err) {
+    console.error(
+      `Error fetching item for category ID ${categoryId}, genre ID ${genreId}, and item ID ${itemId}:`,
+      err
+    );
+    throw err;
+  }
+}
+
 async function getGenreName(categoryId, genreId) {
   try {
     const { rows } = await pool.query(
@@ -60,5 +86,6 @@ async function getGenreName(categoryId, genreId) {
 module.exports = {
   getGenres,
   getItems,
+  getItem,
   getGenreName,
 };

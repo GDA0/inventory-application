@@ -19,13 +19,20 @@ async function readItems(req, res) {
     const categoryName = categoryId === "1" ? "Movies" : "TV Shows";
     const genreName = await queries.getGenreName(categoryId, genreId);
     const title = `${categoryName} | ${genreName}`;
-    res.render("items", { title, items, categoryId });
+    res.render("items", { title, items, categoryId, genreId });
   } catch (err) {}
 }
 
 async function readItem(req, res) {
   try {
-    res.send(req.params);
+    const { categoryId, genreId, itemId } = req.params;
+    const item = await queries.getItem(categoryId, genreId, itemId);
+    res.render("item", {
+      title: categoryId === "1" ? "Movie" : "TV Show",
+      item,
+      categoryId,
+      genreId,
+    });
   } catch (err) {}
 }
 
