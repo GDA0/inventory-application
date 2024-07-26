@@ -4,7 +4,7 @@ const { body, validationResult } = require("express-validator");
 async function createGenreGet(req, res) {
   try {
     const { categoryId } = req.params;
-    res.render("./forms/add-genre", {
+    res.render("./forms/create-genre", {
       title: "Create genre",
       categoryId,
       errors: [],
@@ -22,18 +22,13 @@ const createGenrePost = [
     .isLength({ min: 3 })
     .withMessage("Genre name must be at least 3 characters long")
     .escape(),
-  body("category_id")
-    .notEmpty()
-    .withMessage("Category is required")
-    .isInt()
-    .withMessage("Category must be a valid number"),
 
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       // Render the form again with validation errors
       const { categoryId } = req.params;
-      return res.status(400).render("./forms/add-genre", {
+      return res.status(400).render("./forms/create-genre", {
         title: "Create genre",
         categoryId,
         errors: errors.array(),
@@ -42,13 +37,14 @@ const createGenrePost = [
     }
 
     try {
-      const { name, category_id } = req.body;
+      const { name } = req.body;
+      const { categoryId } = req.params;
       // Add the genre to the database if it doesn't exist
-      const genreExists = await queries.genreExists(name.trim(), category_id);
+      const genreExists = await queries.genreExists(name.trim(), categoryId);
       if (!genreExists) {
-        await queries.addGenre(name, category_id);
+        await queries.addGenre(name, categoryId);
       }
-      res.redirect(`/categories/${category_id}/genres`);
+      res.redirect(`/categories/${categoryId}/genres`);
     } catch (err) {}
   },
 ];
