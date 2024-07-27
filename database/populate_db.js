@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { client } = require("./client-and-pool");
+const { client } = require('./client-and-pool')
 
 const SQL = `
 -- Drop tables if they exist
@@ -65,19 +65,19 @@ INSERT INTO items (name, description, category_id, genre_id) VALUES
   ('Breaking Bad', 'A high school chemistry teacher turned methamphetamine manufacturer.', 2, 7),
   ('The Crown', 'A historical drama about the reign of Queen Elizabeth II.', 2, 7)
 ON CONFLICT (id) DO NOTHING;
-`;
+`
 
-async function populateDb() {
-  console.log("Seeding database...");
+async function populateDb () {
+  console.log('Seeding database...')
   try {
-    await client.connect();
-    await client.query(SQL);
-    console.log("Database seeded successfully.");
+    await client.connect()
+    await client.query(SQL)
+    console.log('Database seeded successfully.')
   } catch (err) {
-    console.error("Error seeding database:", err);
+    console.error('Error seeding database:', err)
   } finally {
-    await client.end();
+    await client.end()
   }
 }
 
-populateDb();
+populateDb()

@@ -1,138 +1,138 @@
-const queries = require("../database/queries");
-const { body, validationResult } = require("express-validator");
+const queries = require('../database/queries')
+const { body, validationResult } = require('express-validator')
 
-async function createGenreGet(req, res) {
+async function createGenreGet (req, res) {
   try {
-    const { categoryId } = req.params;
-    res.render("./forms/create-genre", {
-      title: "Create genre",
+    const { categoryId } = req.params
+    res.render('./forms/create-genre', {
+      title: 'Create genre',
       categoryId,
       errors: [],
       formData: {},
-      verb: "",
-    });
+      verb: ''
+    })
   } catch (err) {}
 }
 
 const createGenrePost = [
   // Validation rules
-  body("name")
+  body('name')
     .trim()
     .notEmpty()
-    .withMessage("Genre name is required")
+    .withMessage('Genre name is required')
     .isLength({ min: 3 })
-    .withMessage("Genre name must be at least 3 characters long")
+    .withMessage('Genre name must be at least 3 characters long')
     .escape(),
 
   async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
       // Render the form again with validation errors
-      const { categoryId } = req.params;
-      return res.render("./forms/create-genre", {
-        title: "Create genre",
+      const { categoryId } = req.params
+      return res.render('./forms/create-genre', {
+        title: 'Create genre',
         categoryId,
         errors: errors.array(),
         formData: req.body,
-        verb: "",
-      });
+        verb: ''
+      })
     }
 
     try {
-      const { name } = req.body;
-      const { categoryId } = req.params;
+      const { name } = req.body
+      const { categoryId } = req.params
       // Add the genre to the database if it doesn't exist
-      const genreExists = await queries.genreExists(name.trim(), categoryId);
+      const genreExists = await queries.genreExists(name.trim(), categoryId)
       if (!genreExists) {
-        await queries.addGenre(name, categoryId);
+        await queries.addGenre(name, categoryId)
       }
-      res.redirect(`/categories/${categoryId}/genres`);
+      res.redirect(`/categories/${categoryId}/genres`)
     } catch (err) {}
-  },
-];
+  }
+]
 
-async function readGenres(req, res) {
+async function readGenres (req, res) {
   try {
-    const { categoryId } = req.params;
-    const genres = await queries.getGenres(categoryId);
-    res.render("genres", {
-      title: categoryId === "1" ? "Movies" : "TV Shows",
+    const { categoryId } = req.params
+    const genres = await queries.getGenres(categoryId)
+    res.render('genres', {
+      title: categoryId === '1' ? 'Movies' : 'TV Shows',
       categoryId,
-      genres,
-    });
+      genres
+    })
   } catch (err) {}
 }
 
-async function updateGenreGet(req, res) {
+async function updateGenreGet (req, res) {
   try {
-    const { categoryId, genreId } = req.params;
-    const genreName = await queries.getGenreName(genreId, categoryId);
-    res.render("./forms/create-genre", {
-      title: "Update genre",
+    const { categoryId, genreId } = req.params
+    const genreName = await queries.getGenreName(genreId, categoryId)
+    res.render('./forms/create-genre', {
+      title: 'Update genre',
       categoryId,
       genreId,
       errors: [],
       formData: { name: genreName },
-      verb: "Update",
-    });
+      verb: 'Update'
+    })
   } catch (err) {}
 }
 
 const updateGenrePost = [
   // Validation rules
-  body("name")
+  body('name')
     .trim()
     .notEmpty()
-    .withMessage("Genre name is required")
+    .withMessage('Genre name is required')
     .isLength({ min: 3 })
-    .withMessage("Genre name must be at least 3 characters long")
+    .withMessage('Genre name must be at least 3 characters long')
     .escape(),
 
   async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
       // Render the form again with validation errors
-      const { categoryId } = req.params;
-      return res.render("./forms/create-genre", {
-        title: "Create genre",
+      const { categoryId } = req.params
+      return res.render('./forms/create-genre', {
+        title: 'Create genre',
         categoryId,
         errors: errors.array(),
         formData: req.body,
-        verb: "",
-      });
+        verb: ''
+      })
     }
 
     try {
-      const { name } = req.body;
-      const { categoryId, genreId } = req.params;
+      const { name } = req.body
+      const { categoryId, genreId } = req.params
       // Update the genre if it doesn't exist with the same name in the category
-      const genreExists = await queries.genreExists(name.trim(), categoryId);
+      const genreExists = await queries.genreExists(name.trim(), categoryId)
       if (!genreExists) {
-        await queries.updateGenre(name, genreId, categoryId);
+        await queries.updateGenre(name, genreId, categoryId)
       }
-      res.redirect(`/categories/${categoryId}/genres/${genreId}/items`);
+      res.redirect(`/categories/${categoryId}/genres/${genreId}/items`)
     } catch (err) {}
-  },
-];
+  }
+]
 
-async function deleteGenreGet(req, res) {
+async function deleteGenreGet (req, res) {
   try {
-    const { categoryId, genreId } = req.params;
-    const items = await queries.getItems(categoryId, genreId);
-    res.render("delete-genre", {
-      title: "Delete genre",
+    const { categoryId, genreId } = req.params
+    const items = await queries.getItems(categoryId, genreId)
+    res.render('delete-genre', {
+      title: 'Delete genre',
       items,
       categoryId,
-      genreId,
-    });
+      genreId
+    })
   } catch (err) {}
 }
 
-async function deleteGenrePost(req, res) {
+async function deleteGenrePost (req, res) {
   try {
-    const { categoryId, genreId } = req.params;
-    await queries.removeGenre(genreId, categoryId);
-    res.redirect(`/categories/${categoryId}/genres`);
+    const { categoryId, genreId } = req.params
+    await queries.removeGenre(genreId, categoryId)
+    res.redirect(`/categories/${categoryId}/genres`)
   } catch (err) {}
 }
 
@@ -143,5 +143,5 @@ module.exports = {
   updateGenreGet,
   updateGenrePost,
   deleteGenreGet,
-  deleteGenrePost,
-};
+  deleteGenrePost
+}
