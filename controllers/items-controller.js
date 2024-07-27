@@ -91,7 +91,6 @@ async function updateItemGet(req, res) {
   try {
     const { categoryId, genreId, itemId } = req.params;
     const item = await queries.getItem(itemId, categoryId, genreId);
-    console.log(item);
     res.render("./forms/create-item", {
       title: categoryId == 1 ? "Update movie" : "Update tv show",
       errors: [],
@@ -107,11 +106,57 @@ async function updateItemGet(req, res) {
   } catch (err) {}
 }
 
-async function updateItemPost(req, res) {
-  try {
-    res.send(req.params);
-  } catch (err) {}
-}
+const updateItemPost = [
+  // Validation rules
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("name is required")
+    .isLength({ min: 3 })
+    .withMessage("name must be at least 3 characters long")
+    .escape(),
+  body("description").optional().trim().escape(),
+
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      // Render the form again with validation errors
+      const { categoryId, genreId, itemId } = req.params;
+      return res.render("./forms/create-item", {
+        title: categoryId == 1 ? "Update movie" : "Update tv show",
+        categoryId,
+        genreId,
+        errors: errors.array(),
+        formData: req.body,
+        itemId,
+        verb: "Update",
+      });
+    }
+
+    try {
+      const { name, description } = req.body;
+      const { categoryId, genreId, itemId } = req.params;
+      // Add the item to the database if it doesn't exist
+      const itemExists = await queries.itemExists(
+        name.trim(),
+        categoryId,
+        genreId
+      );
+      if (!itemExists) {
+        await queries.updateItem(
+          name.trim(),
+          description.trim(),
+          itemId,
+          genreId,
+          categoryId
+        );
+      }
+      res.redirect(
+        `/categories/${categoryId}/genres/${genreId}/items/${itemId}`
+      );
+    } catch (err) {}
+  },
+];
 
 async function deleteItemGet(req, res) {
   try {

@@ -152,6 +152,24 @@ async function updateGenre(name, id, categoryId) {
   }
 }
 
+async function updateItem(name, description, itemId, genreId, categoryId) {
+  try {
+    const query = `
+      UPDATE items
+      SET name = $1, description = $2
+      WHERE id = $3 AND genre_id = $4 AND category_id = $5
+    `;
+    const values = [name, description, itemId, genreId, categoryId];
+    await pool.query(query, values);
+  } catch (err) {
+    console.error(
+      `Error updating item with ID ${itemId} in category ID ${categoryId} and genre ID ${genreId}:`,
+      err
+    );
+    throw err;
+  }
+}
+
 module.exports = {
   getGenres,
   getItems,
@@ -162,4 +180,5 @@ module.exports = {
   itemExists,
   addItem,
   updateGenre,
+  updateItem,
 };
