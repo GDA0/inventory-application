@@ -130,7 +130,9 @@ async function deleteGenreGet(req, res) {
 
 async function deleteGenrePost(req, res) {
   try {
-    res.send(req.params);
+    const { categoryId, genreId } = req.params;
+    await queries.removeGenre(genreId, categoryId);
+    res.redirect(`/categories/${categoryId}/genres`);
   } catch (err) {}
 }
 
