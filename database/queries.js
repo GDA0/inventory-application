@@ -16,7 +16,7 @@ async function getGenres(categoryId) {
 async function getItems(categoryId, genreId) {
   try {
     const query = `
-      SELECT i.id, i.name, i.description, i.likes
+      SELECT i.id, i.name, i.description
       FROM items i
       WHERE i.category_id = $1
         AND i.genre_id = $2
@@ -36,7 +36,7 @@ async function getItems(categoryId, genreId) {
 async function getItem(itemId, categoryId, genreId) {
   try {
     const query = `
-      SELECT i.id, i.name, i.description, i.likes
+      SELECT i.id, i.name, i.description
       FROM items i
       WHERE i.id = $1
         AND i.category_id = $2

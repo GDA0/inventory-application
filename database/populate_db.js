@@ -29,7 +29,6 @@ CREATE TABLE items (
   description TEXT,
   category_id INTEGER NOT NULL,
   genre_id INTEGER NOT NULL,
-  likes INTEGER DEFAULT 0,
   FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
