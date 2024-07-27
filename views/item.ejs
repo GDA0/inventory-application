@@ -6,7 +6,19 @@
     Description: <%- item.description %><br />
     Likes: <%= item.likes %><br />
   </div>
-  <div class="mt-3">
-    <a href="/categories/<%= categoryId%>/genres/<%= genreId %>/items">Back</a>
+  <div class="ms-auto">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item">
+        <a href="/categories/<%= categoryId%>/genres/<%= genreId %>/items"
+          >Back</a
+        >
+      </li>
+      <li class="breadcrumb-item">
+        <a
+          href="/categories/<%= categoryId %>/genres/<%= genreId %>/items/<%= itemId %>/update"
+          >Update <%= categoryId == 1 ? 'movie' : 'tv show' %></a
+        >
+      </li>
+    </ol>
   </div>
 </div>

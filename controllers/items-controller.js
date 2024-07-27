@@ -81,13 +81,29 @@ async function readItem(req, res) {
       item,
       categoryId,
       genreId,
+      itemId,
+      verb: "",
     });
   } catch (err) {}
 }
 
 async function updateItemGet(req, res) {
   try {
-    res.send(req.params);
+    const { categoryId, genreId, itemId } = req.params;
+    const item = await queries.getItem(itemId, categoryId, genreId);
+    console.log(item);
+    res.render("./forms/create-item", {
+      title: categoryId == 1 ? "Update movie" : "Update tv show",
+      errors: [],
+      categoryId,
+      formData: {
+        name: item.name,
+        description: item.description,
+      },
+      genreId,
+      itemId,
+      verb: "Update",
+    });
   } catch (err) {}
 }
 
