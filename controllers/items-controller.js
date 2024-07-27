@@ -160,7 +160,13 @@ const updateItemPost = [
 
 async function deleteItemGet(req, res) {
   try {
-    res.send(req.params);
+    const { categoryId, genreId, itemId } = req.params;
+    res.render("delete-item", {
+      title: categoryId == 1 ? "Delete movie" : "Delete tv show",
+      categoryId,
+      genreId,
+      itemId,
+    });
   } catch (err) {}
 }
 
