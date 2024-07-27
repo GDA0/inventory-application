@@ -187,6 +187,24 @@ async function removeGenre(genreId, categoryId) {
   }
 }
 
+async function removeItem(itemId, genreId, categoryId) {
+  try {
+    const query = `
+    DELETE FROM items
+    WHERE id = $1
+      AND genre_id = $2
+      AND category_id = $3
+      `;
+    values = [itemId, genreId, categoryId];
+    await pool.query(query, values);
+  } catch (err) {
+    console.error(
+      `Error deleting item with ID ${itemId}, in genre ID ${genreId}, and category ID ${categoryId}`
+    );
+    throw err;
+  }
+}
+
 module.exports = {
   getGenres,
   getItems,
@@ -199,4 +217,5 @@ module.exports = {
   updateGenre,
   updateItem,
   removeGenre,
+  removeItem,
 };

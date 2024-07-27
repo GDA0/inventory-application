@@ -18,6 +18,13 @@
     </div>
   </div>
 
+  <% if (genres.length === 0) { %>
+  <div class="alert alert-info">
+    No genres available in this category.
+    <a href="/categories/<%= categoryId %>/genres/create">Create a new genre</a
+    >.
+  </div>
+  <% } else { %>
   <div class="row g-3">
     <% genres.forEach(genre => { %>
     <div class="col col-md-4">
@@ -33,4 +40,5 @@
     </div>
     <% }); %>
   </div>
+  <% } %>
 </div>

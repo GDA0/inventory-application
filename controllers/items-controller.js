@@ -10,6 +10,7 @@ async function createItemGet(req, res) {
       categoryId,
       formData: {},
       genreId,
+      verb: "",
     });
   } catch (err) {}
 }
@@ -36,6 +37,7 @@ const createItemPost = [
         genreId,
         errors: errors.array(),
         formData: req.body,
+        verb: "",
       });
     }
 
@@ -172,7 +174,9 @@ async function deleteItemGet(req, res) {
 
 async function deleteItemPost(req, res) {
   try {
-    res.send(req.params);
+    const { categoryId, genreId, itemId } = req.params;
+    await queries.removeItem(itemId, genreId, categoryId);
+    res.redirect(`/categories/${categoryId}/genres/${genreId}/items`);
   } catch (err) {}
 }
 

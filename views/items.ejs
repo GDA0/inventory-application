@@ -44,9 +44,12 @@
       <% }) %>
     </ul>
     <% } else { %>
-    <p>
+    <div class="alert alert-info">
       No <%= categoryId == 1 ? 'movies' : 'tv shows' %> found for this genre.
-    </p>
+      <a href="/categories/<%= categoryId %>/genres/<%= genreId %>/items/create"
+        >Create <%= categoryId == 1 ? 'movie' : 'tv show' %></a
+      >.
+    </div>
     <% } %>
   </div>
 </div>
