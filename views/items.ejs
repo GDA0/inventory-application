@@ -14,6 +14,11 @@
           >
         </li>
         <li class="breadcrumb-item">
+          <a href="/categories/<%= categoryId %>/genres/<%= genreId %>/delete"
+            >Delete genre</a
+          >
+        </li>
+        <li class="breadcrumb-item">
           <a
             href="/categories/<%= categoryId %>/genres/<%= genreId %>/items/create"
             >Create <%= categoryId == 1 ? 'movie' : 'tv show' %></a

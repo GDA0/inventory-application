@@ -1,0 +1,46 @@
+<% layout('layout') %>
+
+<div class="container mt-4">
+  <h3>Delete Genre</h3>
+  <% if (items.length > 0) { %>
+  <div class="alert alert-danger">
+    <p>
+      This genre cannot be deleted because it has the following <%= categoryId
+      == 1 ? 'movies' : 'tv shows' %> in it.
+    </p>
+    <ul>
+      <% items.forEach(item => { %>
+      <li>
+        <a
+          href="/categories/<%= categoryId %>/genres/<%= genreId %>/items/<%= item.id %>"
+          ><%= item.name %></a
+        >
+      </li>
+      <% }) %>
+    </ul>
+  </div>
+  <a
+    class="btn btn-secondary"
+    href="/categories/<%= categoryId %>/genres/<%= genreId %>/items"
+    >Back</a
+  >
+  <% } else { %>
+  <div class="alert alert-danger">
+    <p>Are you sure you want to delete this genre?</p>
+    <p>This action cannot be undone.</p>
+  </div>
+  <form
+    action="/categories/<%= categoryId %>/genres/<%= genreId %>/delete"
+    method="post"
+  >
+    <div class="d-flex">
+      <a
+        class="btn btn-secondary me-2"
+        href="/categories/<%= categoryId %>/genres/<%= genreId %>/items"
+        >Cancel</a
+      >
+      <button class="btn btn-danger" type="submit">Delete</button>
+    </div>
+  </form>
+  <% } %>
+</div>

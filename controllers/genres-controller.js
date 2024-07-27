@@ -117,7 +117,14 @@ const updateGenrePost = [
 
 async function deleteGenreGet(req, res) {
   try {
-    res.send(req.params);
+    const { categoryId, genreId } = req.params;
+    const items = await queries.getItems(categoryId, genreId);
+    res.render("delete-genre", {
+      title: "Delete genre",
+      items,
+      categoryId,
+      genreId,
+    });
   } catch (err) {}
 }
 
