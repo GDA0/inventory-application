@@ -31,7 +31,7 @@ const createItemPost = [
     if (!errors.isEmpty()) {
       // Render the form again with validation errors
       const { categoryId, genreId } = req.params;
-      return res.render("./forms/create-genre", {
+      return res.render("./forms/create-item", {
         title: categoryId == 1 ? "Create movie" : "Create tv show",
         categoryId,
         genreId,
