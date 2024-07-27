@@ -21,9 +21,7 @@ async function getItems(categoryId, genreId) {
       WHERE i.category_id = $1
         AND i.genre_id = $2
     `;
-
     const values = [categoryId, genreId];
-
     const { rows } = await pool.query(query, values);
     return rows;
   } catch (err) {
@@ -44,14 +42,12 @@ async function getItem(itemId, categoryId, genreId) {
         AND i.category_id = $2
         AND i.genre_id = $3
     `;
-
     const values = [itemId, categoryId, genreId];
-
     const { rows } = await pool.query(query, values);
     return rows[0];
   } catch (err) {
     console.error(
-      `Error fetching item for category ID ${categoryId}, genre ID ${genreId}, and item ID ${itemId}:`,
+      `Error fetching item for item ID ${itemId}, category ID ${categoryId}, and genre ID ${genreId}:`,
       err
     );
     throw err;
@@ -66,7 +62,6 @@ async function getGenreName(genreId, categoryId) {
        WHERE id = $1 AND category_id = $2`,
       [genreId, categoryId]
     );
-
     return rows[0]?.name;
   } catch (err) {
     console.error(
@@ -109,10 +104,10 @@ async function genreExists(name, categoryId) {
 async function itemExists(name, categoryId, genreId) {
   try {
     const query = `
-      SELECT 1 FROM items i
-      WHERE i.name ILIKE $1
-        AND i.category_id = $2
-        AND i.genre_id = $3
+      SELECT 1 FROM items
+      WHERE name ILIKE $1
+        AND category_id = $2
+        AND genre_id = $3
       LIMIT 1
     `;
     const values = [name, categoryId, genreId];
@@ -139,15 +134,18 @@ async function addItem(name, description, categoryId, genreId) {
   }
 }
 
-async function addItemGenre(itemId, genreId) {
+async function updateGenre(name, id, categoryId) {
   try {
-    await pool.query(
-      `INSERT INTO item_genre (item_id, genre_id) VALUES ($1, $2)`,
-      [itemId, genreId]
-    );
+    const query = `
+      UPDATE genres
+      SET name = $1
+      WHERE id = $2 AND category_id = $3
+    `;
+    const values = [name, id, categoryId];
+    await pool.query(query, values);
   } catch (err) {
     console.error(
-      `Error adding item_genre for item ID ${itemId} and genre ID ${genreId}:`,
+      `Error updating genre ID ${id} in category ID ${categoryId} with new name "${name}":`,
       err
     );
     throw err;
@@ -163,5 +161,5 @@ module.exports = {
   genreExists,
   itemExists,
   addItem,
-  addItemGenre,
+  updateGenre,
 };

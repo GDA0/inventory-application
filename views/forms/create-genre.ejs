@@ -10,7 +10,7 @@
 
 <form
   class="d-flex flex-column"
-  action="/categories/<%= categoryId %>/genres/create"
+  action="<%= verb ? `/categories/${categoryId}/genres/${genreId}/update` : `/categories/${categoryId}/genres/create` %>"
   method="post"
   novalidate
 >
@@ -26,15 +26,16 @@
       required
     />
     <div class="form-text">
-      Note: Genre names that already exist in this category won't be created.
+      Note: Genre names that already exist in this category <%= verb ? "cannot be updated." : "won't be created." %>
     </div>
   </div>
   <div class="ms-auto">
     <a
       class="btn btn-secondary me-1"
       href="/categories/<%= categoryId %>/genres"
-      >Cancel</a
     >
+      Cancel
+    </a>
     <button class="btn btn-primary" type="submit">
       <%= verb ? verb : 'Create' %> genre
     </button>

@@ -70,6 +70,7 @@ async function updateGenreGet(req, res) {
     res.render("./forms/create-genre", {
       title: "Update genre",
       categoryId,
+      genreId,
       errors: [],
       formData: { name: genreName },
       verb: "Update",
@@ -77,11 +78,42 @@ async function updateGenreGet(req, res) {
   } catch (err) {}
 }
 
-async function updateGenrePost(req, res) {
-  try {
-    res.send(req.params);
-  } catch (err) {}
-}
+const updateGenrePost = [
+  // Validation rules
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("Genre name is required")
+    .isLength({ min: 3 })
+    .withMessage("Genre name must be at least 3 characters long")
+    .escape(),
+
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      // Render the form again with validation errors
+      const { categoryId } = req.params;
+      return res.render("./forms/create-genre", {
+        title: "Create genre",
+        categoryId,
+        errors: errors.array(),
+        formData: req.body,
+        verb: "",
+      });
+    }
+
+    try {
+      const { name } = req.body;
+      const { categoryId, genreId } = req.params;
+      // Update the genre if it doesn't exist with the same name in the category
+      const genreExists = await queries.genreExists(name.trim(), categoryId);
+      if (!genreExists) {
+        await queries.updateGenre(name, genreId, categoryId);
+      }
+      res.redirect(`/categories/${categoryId}/genres/${genreId}/items`);
+    } catch (err) {}
+  },
+];
 
 async function deleteGenreGet(req, res) {
   try {
